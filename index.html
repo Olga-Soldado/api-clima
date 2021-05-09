@@ -12,7 +12,18 @@
         $('document').ready(function () {
             $('form').submit(function (inf) {
                 inf.preventDefault();
-                let nombre = $('#Busqueda').val();
+                let nombre = $('#nombre-ciudad').val();
+                
+                $.get(`https://api.openweathermap.org/data/2.5/weather?q=${nombre}&units=metric&appid=6db0768d101811352ce48089dea7d08b`, function (data) {
+                    $('.pais').html(`${data.sys.country}`)//pais.
+                    $('.nombre').html(`${data.name}`)//nombre.
+                    $('.coordenadas').html(`longitud ${data.coord.lon} , latitud ${data.coord.lat} `)//longitud  y latitud.
+                    $('.tem').html(`<li>Temperatura actual:${data.main.temp}° </li><li>temperatura minima:${data.main.temp_min}°</li><li>temperatura maxima:${data.main.temp_max}°</li>`)//temperatura actual,minima y max
+                    $('.viento').html(`${data.wind.speed*10 } km/hr`)//velocidad del viento.
+                    $('.clima').html(`${data.weather.description}`)//clima.
+                    console.log(data);//revisar para ver la informacion de la api.
+                }, "json");
+                //se insertan otras condiciones.
                 if(nombre == ""){//si se ingresa una valor vacio.
                     alert("Inserte un valor")
                     return false
@@ -21,18 +32,6 @@
                         alert("Valor invalido")
                         return false
                     });
-
-                $.get(`https://api.openweathermap.org/data/2.5/weather?q=${nombre}&units=metric&appid=6db0768d101811352ce48089dea7d08b`, function (data) {
-                    
-
-                    $('.pais').html(`${data.sys.country}`)//nombre,pais  y temperatura.
-                    $('.nombre').html(`${data.name}`)//nombre.
-                    $('.coordenadas').html(`  ${data.coord.lon},${data.coord.lat} `)//longitud  y latitud.
-                    $('.tem').html(`<li>Temperatura actual:${data.main.temp}° </li><li>temperatura minima:${data.main.temp_min}°</li><li>temperatura maxima:${data.main.temp_max}°</li>`)//temperatura actual,minima y max
-                    $('.viento').html(`${data.wind.speed } km/hr`)//velocidad del viento.
-                    $('.clima').html(`${data.weather.description}`)//clima.
-                    console.log(data);
-                }, "json");
 
             });
 
@@ -46,15 +45,15 @@
         <div class="container sm"style="background-image: url(img/bg.jpg);border-radius: 1.5em;border: 4px rgb(8, 59, 155) solid;background-size: cover;color:white">
             <div class="row">
                 <div class=" col">
-                    <label for="Busqueda" class="form-label" style="text-align: center;"><h1 style="font-weight:bold ;font-style:italic;">Pronostico del tiempo.-</h1></label>
+                    <label for="Buscar" class="form-label"><h1 style="font-weight:bold ;font-style:italic;">Pronostico del tiempo.-</h1></label>
                     <h2>Ingrese ciudad:</h2>
-                    <p><input type="text" class="form-control" id="Busqueda"><button type="submit" class="btn btn-primary">Buscar</button></p>
+                    <p><input type="text" class="form-control" id="nombre-ciudad"><button type="submit" class="btn btn-primary">Buscar</button></p>
                 </div>
             </div>
 
                 <div class="row">
                     <div class="col">
-                        <table class="table" style="color: white;">
+                        <table class="table" style="color: white; font-weight: bold;">
                             <h3>Informacion:</h3>
                             <tr>
                                 <td >Clima:</td>
